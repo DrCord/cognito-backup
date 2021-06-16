@@ -107,6 +107,10 @@ function restore(cli) {
     cli.showHelp();
   }
 
+  if (!tempPassword) {
+    console.log('if temp-password is not supplied the imported users will be emailed a generated temporary password');
+  }
+
   // AWS limits to 10 per second, so be safe and do 5 per second
   // https://docs.aws.amazon.com/cognito/latest/developerguide/limits.html
   const limiter = new Bottleneck({ minTime: 200 });
@@ -124,22 +128,29 @@ function restore(cli) {
         const params = {
           UserPoolId: userPoolId,
           Username: user.Attributes.find(attribute => attribute.Name === 'email').Value,
+          DesiredDeliveryMediums: [],
+          MessageAction: 'SUPPRESS',
           ForceAliasCreation: false,
+          TemporaryPassword: tempPassword ? tempPassword.toString(): 'OverwrittenInNextStep0.',
           UserAttributes: attributes,
         };
-
-        if (tempPassword) {
-          params['TemporaryPassword'] = tempPassword.toString()
-          params['MessageAction'] = 'SUPPRESS'
-          params['DesiredDeliveryMediums'] = []
-        } else {
-          params['MessageAction'] = 'RESEND'
-          params['DesiredDeliveryMediums'] = ['EMAIL']
-        }
-
+        
+        // create user initial
         const wrapped = limiter.wrap(async () => cognitoIsp.adminCreateUser(params).promise());
         const response = await wrapped();
-        console.log(response);
+
+        // if sending emails and letting cognito generate passwords
+        // then user has to be created and then re-created
+        if (!tempPassword) {
+          delete params['TemporaryPassword']
+          params['MessageAction'] = 'RESEND'
+          params['DesiredDeliveryMediums'] = ['EMAIL']
+          const wrapped2 = limiter.wrap(async () => cognitoIsp.adminCreateUser(params).promise());
+          const response2 = await wrapped2();
+          console.log(JSON.stringify(response2));
+        }
+
+        console.log(JSON.stringify(response2 ? response2 : response));
       });
     });
 }
