@@ -1,5 +1,5 @@
 {
-  "name": "cognito-backup",
+  "name": "cognito-backup-restoration-enhancements",
   "version": "2.1.1",
   "description": "CLI for backing up and restoring AWS Cogntito User Pools",
   "main": "cli.js",
@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mifi/cognito-backup.git"
+    "url": "https://github.com/DrCord/cognito-backup-restoration-enhancements.git"
   },
   "author": {
-    "name": "Mikael Finstad",
-    "email": "finstaden@gmail.com",
-    "url": "mifi.no"
+    "name": "Cord Slatton",
+    "email": "cord42@gmail.com",
+    "url": "http://cordslatton.com"
   },
   "license": "MIT",
   "files": [
