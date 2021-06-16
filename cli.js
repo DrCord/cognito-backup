@@ -162,7 +162,7 @@ const cli = meow(`
     Usage
       $ cognito-backup backup-users <user-pool-id> <options>  Backup/export all users in a single user pool
       $ cognito-backup backup-all-users <options>  Backup all users in all user pools for this account
-      $ cognito-backup restore-users <user-pool-id> <temp-password>  Restore/import users to a single user pool
+      $ cognito-backup restore-users <user-pool-id> <temp-password> <options> Restore/import users to a single user pool
 
       restore-users:temp-password is optional. If not supplied then will allow AWS to create a temp password and send an email to the user with that password.
 
