@@ -108,7 +108,7 @@ function restore(cli) {
   }
 
   if (!tempPassword) {
-    console.log('if temp-password is not supplied the imported users will be emailed a generated temporary password');
+    console.log('temp-password parameter was not supplied: the imported users will be emailed a generated temporary password');
   }
 
   // AWS limits to 10 per second, so be safe and do 5 per second
