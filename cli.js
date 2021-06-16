@@ -123,7 +123,7 @@ function restore(cli) {
 
         const params = {
           UserPoolId: userPoolId,
-          Username: user.Username,
+          Username: user.Attributes.find(attribute => attribute.Name === 'email').Value,
           ForceAliasCreation: false,
           UserAttributes: attributes,
         };
