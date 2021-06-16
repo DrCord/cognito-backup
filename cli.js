@@ -107,14 +107,9 @@ function restore(cli) {
     cli.showHelp();
   }
 
-  if (!tempPassword) {
-    console.error('temp-password is required');
-    cli.showHelp();
-  }
-
-  // AWS limits to 10 per second, so be safe and do 4 per second
+  // AWS limits to 10 per second, so be safe and do 5 per second
   // https://docs.aws.amazon.com/cognito/latest/developerguide/limits.html
-  const limiter = new Bottleneck({ minTime: 250 });
+  const limiter = new Bottleneck({ minTime: 200 });
 
 
   // TODO make streamable
@@ -129,12 +124,18 @@ function restore(cli) {
         const params = {
           UserPoolId: userPoolId,
           Username: user.Username,
-          DesiredDeliveryMediums: [],
-          MessageAction: 'SUPPRESS',
           ForceAliasCreation: false,
-          TemporaryPassword: tempPassword.toString(),
           UserAttributes: attributes,
         };
+
+        if (tempPassword) {
+          params['TemporaryPassword'] = tempPassword.toString()
+          params['MessageAction'] = 'SUPPRESS'
+          params['DesiredDeliveryMediums'] = []
+        } else {
+          params['MessageAction'] = 'RESEND'
+          params['DesiredDeliveryMediums'] = ['EMAIL']
+        }
 
         const wrapped = limiter.wrap(async () => cognitoIsp.adminCreateUser(params).promise());
         const response = await wrapped();
@@ -149,6 +150,8 @@ const cli = meow(`
       $ cognito-backup backup-users <user-pool-id> <options>  Backup/export all users in a single user pool
       $ cognito-backup backup-all-users <options>  Backup all users in all user pools for this account
       $ cognito-backup restore-users <user-pool-id> <temp-password>  Restore/import users to a single user pool
+
+      restore-users:temp-password is optional. If not supplied then will allow AWS to create a temp password and send an email to the user with that password.
 
       AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and AWS_REGION
       can be specified in env variables or ~/.aws/credentials
