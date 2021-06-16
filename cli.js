@@ -150,7 +150,11 @@ function restore(cli) {
           console.log('re-create response:', JSON.stringify(response2));
         }
 
-        console.log('create response:', !tempPassword ? JSON.stringify(response2) : JSON.stringify(response));
+        if(!tempPassword) {
+          JSON.stringify(response2)
+        } else {
+          JSON.stringify(response)
+        }
       });
     });
 }
