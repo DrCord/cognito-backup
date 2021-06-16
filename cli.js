@@ -147,10 +147,10 @@ function restore(cli) {
           params['DesiredDeliveryMediums'] = ['EMAIL']
           const wrapped2 = limiter.wrap(async () => cognitoIsp.adminCreateUser(params).promise());
           const response2 = await wrapped2();
-          console.log(JSON.stringify(response2));
+          console.log('re-create repsonse:', JSON.stringify(response2));
         }
 
-        console.log(JSON.stringify(response2 ? response2 : response));
+        console.log('create response:', JSON.stringify(!tempPassword ? response2 : response));
       });
     });
 }
