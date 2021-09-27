@@ -2,7 +2,41 @@
 Amazon doesn't have any way of backing up their AWS Cognito User Pools.
 So in my frustrating times working with AWS Cognito, I wrote this tool. `cognito-backup` is a simple CLI for backing up the user data, and can also restore afterwards. <b>Note: AWS has no way of extracting the passwords of your users so you need to store these separately 😵</b>
 
+## Contributing
 
+### Git commit formatting
+
+We use the `Angular git commit` style
+
+Full (long) version:
+
+```git commit template
+<type>(<scope>): <subject>
+<BLANK LINE>
+<body>
+<BLANK LINE>
+<footer>
+```
+
+Short version
+
+```git commit template
+<type>(<scope>): <subject>
+```
+
+See https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-format more details
+
+VS Code extension that helps you to make the commit msg, no need to remember your scope, etc.:
+https://marketplace.visualstudio.com/items?itemName=Jhecht.git-angular
+
+We use the allowed `types` from https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-format
+
+We use custom `scopes` per repository, see `scopes` below.
+
+#### Scopes
+
+- config
+- root
 
 ## Requirements
 
